@@ -1,0 +1,3919 @@
+{
+  "name": {
+    "title": "Name",
+    "type": "string",
+    "hidden": true,
+    "fieldDependencies": ["employee.fullName", "company.companyName"]
+  },
+  "employeeId": {
+    "title": "Employee",
+    "type": ["string", "null"],
+    "foreignKey": "employee",
+    "foreignKeyType": "many-to-one",
+    "isNotEmpty": true
+  },
+  "companyId": {
+    "title": "Company",
+    "type": ["string", "null"],
+    "foreignKey": "company",
+    "foreignKeyType": "many-to-one",
+    "isNotEmpty": true
+  },
+  "companyName": {
+    "title": "Company Name",
+    "type": "string",
+    "hidden": true,
+    "fieldDependencies": ["company.companyName"]
+  },
+  "residencyId": {
+    "title": "Residency",
+    "type": ["string", "null"],
+    "foreignKey": "country",
+    "foreignKeyType": "many-to-one"
+  },
+  "isQuality": {
+    "title": "Is quality lead",
+    "type": ["boolean", "null"],
+    "trackChanges": true,
+    "allowManuallyOverride": true,
+    "fieldDependencies": [
+      "workPeriod",
+      "quitDate",
+      "noQuitDate",
+      "company.isQuality",
+      "company.isClosedOrPublic",
+      "company.publicDate",
+      "company.closedTime",
+      "createdAt",
+      "company.lastDataRefreshFromCB"
+    ]
+  },
+  "leadScore": {
+    "title": "Lead Score",
+    "type": "number",
+    "fieldDependencies": ["isQuality", "company.score"],
+    "noForeignTrigger": ["company.score"]
+  },
+  "employeeAccountOwnerId": {
+    "title": "Employee Account Owner ID",
+    "type": ["string", "null"],
+    "hidden": true,
+    "foreignKey": "admin",
+    "foreignKeyType": "many-to-one",
+    "fieldDependencies": ["employee.accountOwnerId"]
+  },
+  "isLowPriority": {
+    "title": "Is Low Priority",
+    "type": "boolean",
+    "trackChanges": true
+  },
+  "verified": {
+    "title": "Is verified",
+    "type": "boolean",
+    "trackChanges": true
+  },
+  "contacted": {
+    "title": "Was Contacted",
+    "type": "boolean",
+    "trackChanges": true,
+    "fieldDependencies": ["verified"]
+  },
+  "workPeriod": {
+    "title": "Work period",
+    "type": "string",
+    "enum": [null, "", "< 1", "> 1", "> 2"]
+  },
+  "quitDate": {
+    "title": "Quit date",
+    "type": ["number", "null"],
+    "format": "datestamp"
+  },
+  "noQuitDate": {
+    "title": "No Quit Date",
+    "type": "boolean"
+  },
+  "cartaPermissionsReceived": {
+    "title": "Carta Permissions received",
+    "type": "boolean",
+    "default": false
+  },
+  "optionPackageIds": {
+    "title": "Option Packages",
+    "type": "object",
+    "foreignKey": "option-package",
+    "foreignKeyType": "one-to-many"
+  },
+  "completedPersonalStep": {
+    "title": "Completed Personal Step",
+    "type": "boolean",
+    "hidden": true
+  },
+  "downloadedFundingWire": {
+    "title": "Downloaded Funding Wire",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true
+  },
+  "deadline": {
+    "title": "Deadline",
+    "type": ["number", "null"],
+    "format": "datestamp",
+    "hidden": true,
+    "fieldDependencies": ["optionPackages.deadline"]
+  },
+  "fundingCutoffDate": {
+    "title": "Funding Cutoff Date",
+    "type": ["number", "null"],
+    "format": "datestamp",
+    "hidden": true,
+    "fieldDependencies": ["deadline"]
+  },
+  "offerId": {
+    "title": "Main Offer",
+    "type": ["string", "null"],
+    "foreignKey": "offer",
+    "foreignKeyType": "one-to-one",
+    "fieldDependencies": ["optionPackages.offerOptions.offerId"],
+    "crossRefPath": null
+  },
+  "offerFirstAvailableDate": {
+    "title": "Offer First Available Date",
+    "type": ["number", "null"],
+    "format": "datestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatusAvailableChangedAt"]
+  },
+  "offerStatus": {
+    "title": "Offer Status",
+    "type": ["string", "null"],
+    "enum": [
+      null,
+      "Live",
+      "Available",
+      "Hidden",
+      "Pending Terms Change",
+      "Fully Invested",
+      "Funded",
+      "Dead"
+    ],
+    "trackChanges": true,
+    "fieldDependencies": [
+      "optionPackages.offerOptions.offer.status",
+      "optionPackages.offerOptions.offer.available",
+      "optionPackages.offerOptions.offer.hideDashboard",
+      "optionPackages.offerOptions.offer.pendingTermsChange",
+      "optionPackages.offerOptions.offer.fullyInvested"
+    ]
+  },
+  "offerHideDashboardChangedAt": {
+    "title": "Offer Hide Dashboard Changed At",
+    "type": ["number", "null"],
+    "fieldDependencies": ["offer.hideDashboardChangedAt"]
+  },
+  "fundedAmount": {
+    "title": "Funded Amount",
+    "type": ["string", "null"],
+    "fieldDependencies": ["optionPackages.effectiveValueInvestedOptions"]
+  },
+  "offerFundedTime": {
+    "title": "Offer Funded Time",
+    "type": ["number", "null"],
+    "format": "datestamp",
+    "fieldDependencies": ["offerStatusFundedChangedAt"]
+  },
+  "termsFundingAmount": {
+    "title": "Terms Funding Amount",
+    "type": ["string", "null"],
+    "fieldDependencies": [
+      "optionPackages.isWeightedAverage",
+      "optionPackages.effectiveExercisePrice",
+      "optionPackages.numberWillingToSell"
+    ]
+  },
+  "termsOptionsNumber": {
+    "title": "Terms Options Number",
+    "type": ["string", "null"],
+    "fieldDependencies": [
+      "optionPackages.isWeightedAverage",
+      "optionPackages.effectiveExercisePrice",
+      "optionPackages.numberWillingToSell"
+    ]
+  },
+  "documentConnectionIds": {
+    "title": "Document Connections",
+    "type": "object",
+    "foreignKey": "document-connection",
+    "foreignKeyType": "one-to-many",
+    "fieldDependencies": ["employee.leadMeta", "employee.email"]
+  },
+  "didUploadedDocuments": {
+    "title": "Did any document were uploaded for this job",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "documentConnectionIds",
+      "employee.leadMeta",
+      "employee.email"
+    ]
+  },
+  "declaredNoSpouse": {
+    "title": "Declared No Spouse",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true
+  },
+  "spouseName": {
+    "title": "Spouse Name",
+    "type": ["string", "null"]
+  },
+  "spouseEmail": {
+    "title": "Spouse Email",
+    "type": ["string", "null"]
+  },
+  "verifiedNoVideo": {
+    "title": "Verified No Video",
+    "type": "boolean"
+  },
+  "sentSocks": {
+    "title": "Sent Socks",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true
+  },
+  "notQualifiedReason": {
+    "title": "Not Qualified Reason",
+    "type": ["string", "null"],
+    "enum": [
+      "Did not quit",
+      "Funded alone (Below $5k)",
+      "Funded alone (Above $5K)",
+      "Did not reach cliff",
+      "Never answered",
+      "Documents Rejected",
+      "False lead",
+      "Deadline close",
+      "Low amount",
+      "Not 102",
+      "Out Of The Money",
+      "SOFA Issues",
+      "Wanted to sell stocks",
+      "Confidence issue",
+      "Funded with a private investor",
+      "Not qualified",
+      "ֿDisagree on split",
+      "Complications in process",
+      "Wanted to understand the value of his options",
+      "No demand",
+      "June PR",
+      "PR",
+      "Never uploaded docs",
+      "Not Interested",
+      "Mixed Residencies",
+      "Problems With The Company",
+      "Company Not Qualified",
+      "Funded with a competitor",
+      "Reached Deadline",
+      null,
+      ""
+    ]
+  },
+  "followupInTheFutureReason": {
+    "title": "Followup In The Future Reason",
+    "type": ["string", "null"],
+    "enum": [
+      "Did Not Quit YET",
+      "Needs More Time",
+      "Checking Other Solutions",
+      "Long Deadline",
+      "Deadline Passed. FU new company",
+      "Waiting On New 409A Valuation",
+      "Live Offer From Same Company Currently Available",
+      "Candidate for PTEP+",
+      "Missed Call",
+      "Unanswered text"
+    ]
+  },
+  "callAttempts": {
+    "title": "# Call Attempts",
+    "type": ["number", "null"],
+    "hidden": true
+  },
+  "lastCallAttemptTime": {
+    "title": "Last Call Attempt Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true
+  },
+  "daysSinceLastCallAttempt": {
+    "title": "Days Since Last Call Attempt",
+    "type": ["number", "null"],
+    "hidden": true
+  },
+  "fundingWireId": {
+    "title": "Funding Wire",
+    "type": ["string", "null"],
+    "foreignKey": "wire",
+    "foreignKeyType": "one-to-one",
+    "crossRefPath": "jobId"
+  },
+  "taxWireId": {
+    "title": "Employee Tax Wire",
+    "type": ["string", "null"],
+    "foreignKey": "wire",
+    "foreignKeyType": "one-to-one",
+    "crossRefPath": "taxJobId"
+  },
+  "fundingAndTaxWireId": {
+    "title": "Employee Funding and Tax Wire",
+    "type": ["string", "null"],
+    "foreignKey": "wire",
+    "foreignKeyType": "one-to-one",
+    "crossRefPath": "fundingAndTaxJobId"
+  },
+  "estimatedAnnualIncome": {
+    "type": "object",
+    "isMoney": true,
+    "properties": {
+      "amount": {
+        "title": "Amount",
+        "type": "number"
+      },
+      "currencyId": {
+        "title": "Currency Code",
+        "type": ["string", "null"],
+        "enum": [null, "", "USD", "EUR", "ILS", "GBP"],
+        "foreignKey": "currency",
+        "foreignKeyType": "many-to-one",
+        "isNotEmpty": true
+      }
+    },
+    "required": ["amount", "currencyId"],
+    "title": "Estimated Annual Income"
+  },
+  "grantType": {
+    "title": "Grant Type",
+    "type": ["string", "null"],
+    "enum": ["ISO", "NSO"]
+  },
+  "notes": {
+    "title": "Notes",
+    "type": "string"
+  },
+  "esop": {
+    "type": ["object", "null"],
+    "hide": true,
+    "properties": {
+      "tool": {
+        "title": "ESOP Tool",
+        "type": ["null", "string"],
+        "enum": ["CARTA", "NONE", null]
+      },
+      "method": {
+        "title": "ESOP Method",
+        "type": ["null", "string"],
+        "enum": ["ADVISOR", "SINGLE_FILE", null]
+      },
+      "email": {
+        "title": "ESOP Email",
+        "type": ["null", "string"]
+      }
+    }
+  },
+  "safeToDelete": {
+    "title": "Is Safe To Delete",
+    "type": "boolean",
+    "hide": true,
+    "fieldDependencies": [
+      "employee.isTestUser",
+      "documentConnectionIds",
+      "optionPackages.offerOptions.offerId"
+    ]
+  },
+  "sllcNumber": {
+    "title": "SLLC Number",
+    "type": ["number", "null"],
+    "fieldDependencies": ["declaredNoSpouse", "spouseEmail", "residencyId"],
+    "trackChanges": true
+  },
+  "sllcTitle": {
+    "title": "SLLC Title",
+    "type": ["string", "null"],
+    "fieldDependencies": ["sllcNumber"]
+  },
+  "offerIFundMatchesNumber": {
+    "title": " Number of Offer's iFund Matches",
+    "type": "number",
+    "hidden": true,
+    "fieldDependencies": [
+      "optionPackages.offerOptions.offer.offerIFundMatchesNumber"
+    ]
+  },
+  "investorsNonWithdrawnTransactionNumberSentece": {
+    "title": "Number of investors that have a transaction that is not withdraw",
+    "type": "string",
+    "hidden": true,
+    "default": "",
+    "fieldDependencies": [
+      "optionPackages.transactionFragments.deal.investorId",
+      "optionPackages.transactionFragments.deal.status"
+    ]
+  },
+  "nonQualityRejected": {
+    "title": "Non Quality Rejected",
+    "type": ["boolean", "null"],
+    "fieldDependencies": [
+      "employee.completedOnboarding",
+      "isQuality",
+      "company.isPremium",
+      "residencyId"
+    ],
+    "trackChanges": true
+  },
+  "companyLegalName": {
+    "title": "Company Legal Name",
+    "type": ["string", "null"]
+  },
+  "companyJurisdictionState": {
+    "title": "Company State Jurisdiction of Incorporation",
+    "type": ["string", "null"],
+    "enum": [
+      "AL",
+      "AK",
+      "AS",
+      "AZ",
+      "AR",
+      "CA",
+      "CO",
+      "CT",
+      "DE",
+      "DC",
+      "FM",
+      "FL",
+      "GA",
+      "GU",
+      "HI",
+      "ID",
+      "IL",
+      "IN",
+      "IA",
+      "KS",
+      "KY",
+      "LA",
+      "ME",
+      "MH",
+      "MD",
+      "MA",
+      "MI",
+      "MN",
+      "MS",
+      "MO",
+      "MT",
+      "NE",
+      "NV",
+      "NH",
+      "NJ",
+      "NM",
+      "NY",
+      "NC",
+      "ND",
+      "MP",
+      "OH",
+      "OK",
+      "OR",
+      "PW",
+      "PA",
+      "PR",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VT",
+      "VI",
+      "VA",
+      "WA",
+      "WV",
+      "WI",
+      "WY"
+    ],
+    "fieldDependencies": ["company.jurisdictionState"]
+  },
+  "companyTradeName": {
+    "title": "Company Trade Name",
+    "type": ["string", "null"],
+    "fieldDependencies": ["company.tradeName"]
+  },
+  "hasFundingWire": {
+    "title": "Has Funding Wire",
+    "type": "boolean",
+    "default": false,
+    "hidden": true,
+    "fieldDependencies": ["fundingWireId", "fundingAndTaxWireId"]
+  },
+  "hasTaxWire": {
+    "title": "Has Funding Wire",
+    "type": ["boolean", "null"],
+    "default": null,
+    "hidden": true,
+    "fieldDependencies": ["taxWireId", "fundingAndTaxWireId", "residencyId"]
+  },
+  "isEmployeeEmailEnabled": {
+    "title": "Is Employee Email Enabled",
+    "type": ["boolean", "null"],
+    "hidden": true,
+    "fieldDependencies": ["employee.notificationPreferences.email"]
+  },
+  "isCompanyBlocked": {
+    "title": "Is Company Blocked",
+    "type": ["boolean", "null"],
+    "hidden": true,
+    "fieldDependencies": ["company.blocked"]
+  },
+  "isEmployeeOnboardingComplete": {
+    "title": "Did Employee Complete Onboarding",
+    "type": ["boolean", "null"],
+    "hidden": true,
+    "fieldDependencies": ["employee.completedOnboarding"]
+  },
+  "employeeCreationTime": {
+    "title": "Employee Creation Time",
+    "type": ["number", "null"],
+    "hidden": true,
+    "fieldDependencies": ["employee.createdAt"],
+    "format": "timestamp"
+  },
+  "userCompletedPersonalStep": {
+    "title": "User Completed Personal Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationPersonalStep": {
+    "title": "Started Marketing Automation Personal Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationPersonalStep": {
+    "title": "Finished Marketing Automation Personal Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDonePersonalStep": {
+    "title": "All Necessary Manual Processing Done Personal Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedOptionsStep": {
+    "title": "User Completed Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationOptionsStep": {
+    "title": "Started Marketing Automation Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationOptionsStep": {
+    "title": "Finished Marketing Automation Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneOptionsStep": {
+    "title": "All Necessary Manual Processing Done Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocsOptionsStep": {
+    "title": "Need To Verify Docs Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyCartaAccountOptionsStep": {
+    "title": "Need To Verify Carta Account Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerifiedOptionsStep": {
+    "title": "Docs Verified Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userWaitingOurActionOptionsStep": {
+    "title": "User Waiting Our Action Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "accumulatedTimeUserWaitingOurActionOptionsStep": {
+    "title": "Accumulated Time User Waiting Our Action Options Step",
+    "type": "number",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "userWaitingOurActionOptionsStep",
+      "userWaitingOurActionOptionsStepChangedAt"
+    ],
+    "fromFlow": true
+  },
+  "userWaitingForVerificationOptionsStep": {
+    "title": "User Waiting For Verification Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToReUploadDocsOptionsStep": {
+    "title": "Need To ReUpload Docs Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocsOptionsStep": {
+    "title": "Need To Send More Docs Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsOptionsStep": {
+    "title": "Waiting For Answers About Docs Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsRejectedOptionsStep": {
+    "title": "Docs Rejected Options Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompleted409AStep": {
+    "title": "User Completed 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomation409AStep": {
+    "title": "Started Marketing Automation 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomation409AStep": {
+    "title": "Finished Marketing Automation 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDone409AStep": {
+    "title": "All Necessary Manual Processing Done 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocs409AStep": {
+    "title": "Need To Verify Docs 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerified409AStep": {
+    "title": "Docs Verified 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userWaitingOurAction409AStep": {
+    "title": "User Waiting Our Action 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "accumulatedTimeUserWaitingOurAction409AStep": {
+    "title": "Accumulated Time User Waiting Our Action 409A Step",
+    "type": "number",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "userWaitingOurAction409AStep",
+      "userWaitingOurAction409AStepChangedAt"
+    ],
+    "fromFlow": true
+  },
+  "userWaitingForVerification409AStep": {
+    "title": "User Waiting For Verification 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToReUploadDocs409AStep": {
+    "title": "Need To ReUpload Docs 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocs409AStep": {
+    "title": "Need To Send More Docs 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocs409AStep": {
+    "title": "Waiting For Answers About Docs 409A Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedDealTermsStep": {
+    "title": "User Completed Deal Terms Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationDealTermsStep": {
+    "title": "Started Marketing Automation Deal Terms Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationDealTermsStep": {
+    "title": "Finished Marketing Automation Deal Terms Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneDealTermsStep": {
+    "title": "All Necessary Manual Processing Done Deal Terms Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedAgreementStep": {
+    "title": "User Completed Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationAgreementStep": {
+    "title": "Started Marketing Automation Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationAgreementStep": {
+    "title": "Finished Marketing Automation Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneAgreementStep": {
+    "title": "All Necessary Manual Processing Done Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsSignedAgreementStep": {
+    "title": "Docs Signed Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToCountersignDocsAgreementStep": {
+    "title": "Need To Countersign Docs Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsCountersignedAgreementStep": {
+    "title": "Docs Countersigned Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsSignedBySpouseAgreementStep": {
+    "title": "Docs signed By Spouse Agreement Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedIdentityStep": {
+    "title": "User Completed Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationIdentityStep": {
+    "title": "Started Marketing Automation Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationIdentityStep": {
+    "title": "Finished Marketing Automation Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneIdentityStep": {
+    "title": "All Necessary Manual Processing Done Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocsIdentityStep": {
+    "title": "Need To Verify Docs Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerifiedIdentityStep": {
+    "title": "Docs Verified Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsSignedIdentityStep": {
+    "title": "Docs Signed Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToReUploadDocsIdentityStep": {
+    "title": "Need To ReUpload Docs Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocsIdentityStep": {
+    "title": "Need To Send More Docs Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsIdentityStep": {
+    "title": "Waiting For Answers About Docs Identity Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedStockPriceStep": {
+    "title": "User Completed Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationStockPriceStep": {
+    "title": "Started Marketing Automation Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationStockPriceStep": {
+    "title": "Finished Marketing Automation Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneStockPriceStep": {
+    "title": "All Necessary Manual Processing Done Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocsStockPriceStep": {
+    "title": "Need To Verify Docs Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerifiedStockPriceStep": {
+    "title": "Docs Verified Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userWaitingOurActionStockPriceStep": {
+    "title": "User Waiting Our Action Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "accumulatedTimeUserWaitingOurActionStockPriceStep": {
+    "title": "Accumulated Time User Waiting Our Action Stock Price Step",
+    "type": "number",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "userWaitingOurActionStockPriceStep",
+      "userWaitingOurActionStockPriceStepChangedAt"
+    ],
+    "fromFlow": true
+  },
+  "needToReUploadDocsStockPriceStep": {
+    "title": "Need To ReUpload Docs Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocsStockPriceStep": {
+    "title": "Need To Send More Docs Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsStockPriceStep": {
+    "title": "Waiting For Answers About Docs Stock Price Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationOpenOfferStep": {
+    "title": "Started Marketing Automation Open Offer Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationOpenOfferStep": {
+    "title": "Finished Marketing Automation Open Offer Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneOpenOfferStep": {
+    "title": "All Necessary Manual Processing Done Open Offer Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationMakeOffersAvailableStep": {
+    "title": "Started Marketing Automation Make Offers Available Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationMakeOffersAvailableStep": {
+    "title": "Finished Marketing Automation Make Offers Available Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneMakeOffersAvailableStep": {
+    "title": "All Necessary Manual Processing Done Make Offers Available Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedBankAccountDetailsStep": {
+    "title": "User Completed Bank Account Details Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationBankAccountDetailsStep": {
+    "title": "Started Marketing Automation Bank Account Details Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationBankAccountDetailsStep": {
+    "title": "Finished Marketing Automation Bank Account Details Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneBankAccountDetailsStep": {
+    "title": "All Necessary Manual Processing Done Bank Account Details Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userWaitingOurActionBankAccountDetailsStep": {
+    "title": "User Waiting Our Action Bank Account Details Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "accumulatedTimeUserWaitingOurActionBankAccountDetailsStep": {
+    "title": "Accumulated Time User Waiting Our Action Bank Account Details Step",
+    "type": "number",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "userWaitingOurActionBankAccountDetailsStep",
+      "userWaitingOurActionBankAccountDetailsStepChangedAt"
+    ],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationCloseOffersStep": {
+    "title": "Started Marketing Automation Close Offers Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationCloseOffersStep": {
+    "title": "Finished Marketing Automation Close Offers Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneCloseOffersStep": {
+    "title": "All Necessary Manual Processing Done Close Offers Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedFinalAmountAppendixStep": {
+    "title": "User Completed Final Amount Appendix Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationFinalAmountAppendixStep": {
+    "title": "Started Marketing Automation Final Amount Appendix Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationFinalAmountAppendixStep": {
+    "title": "Finished Marketing Automation Final Amount Appendix Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneFinalAmountAppendixStep": {
+    "title": "All Necessary Manual Processing Done Final Amount Appendix Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsSignedFinalAmountAppendixStep": {
+    "title": "Docs Signed Final Amount Appendix Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedFinalVideoStep": {
+    "title": "User Completed Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationFinalVideoStep": {
+    "title": "Started Marketing Automation Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationFinalVideoStep": {
+    "title": "Finished Marketing Automation Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneFinalVideoStep": {
+    "title": "All Necessary Manual Processing Done Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocsFinalVideoStep": {
+    "title": "Need To Verify Docs Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerifiedFinalVideoStep": {
+    "title": "Docs Verified Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userWaitingOurActionFinalVideoStep": {
+    "title": "User Waiting Our Action Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "accumulatedTimeUserWaitingOurActionFinalVideoStep": {
+    "title": "Accumulated Time User Waiting Our Action Final Video Step",
+    "type": "number",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "userWaitingOurActionFinalVideoStep",
+      "userWaitingOurActionFinalVideoStepChangedAt"
+    ],
+    "fromFlow": true
+  },
+  "needToReUploadDocsFinalVideoStep": {
+    "title": "Need To ReUpload Docs Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocsFinalVideoStep": {
+    "title": "Need To Send More Docs Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsFinalVideoStep": {
+    "title": "Waiting For Answers About Docs Final Video Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationUploadFundingWireStep": {
+    "title": "Started Marketing Automation Upload Funding Wire Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationUploadFundingWireStep": {
+    "title": "Finished Marketing Automation Upload Funding Wire Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneUploadFundingWireStep": {
+    "title": "All Necessary Manual Processing Done Upload Funding Wire Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedExerciseRequestStep": {
+    "title": "User Completed Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationExerciseRequestStep": {
+    "title": "Started Marketing Automation Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationExerciseRequestStep": {
+    "title": "Finished Marketing Automation Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneExerciseRequestStep": {
+    "title": "All Necessary Manual Processing Done Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocsExerciseRequestStep": {
+    "title": "Need To Verify Docs Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerifiedExerciseRequestStep": {
+    "title": "Docs Verified Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToReUploadDocsExerciseRequestStep": {
+    "title": "Need To ReUpload Docs Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocsExerciseRequestStep": {
+    "title": "Need To Send More Docs Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsExerciseRequestStep": {
+    "title": "Waiting For Answers About Docs Exercise Request Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userCompletedShareCertificateStep": {
+    "title": "User Completed Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationShareCertificateStep": {
+    "title": "Started Marketing Automation Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationShareCertificateStep": {
+    "title": "Finished Marketing Automation Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneShareCertificateStep": {
+    "title": "All Necessary Manual Processing Done Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToVerifyDocsShareCertificateStep": {
+    "title": "Need To Verify Docs Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "docsVerifiedShareCertificateStep": {
+    "title": "Docs Verified Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToReUploadDocsShareCertificateStep": {
+    "title": "Need To ReUpload Docs Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "needToSendMoreDocsShareCertificateStep": {
+    "title": "Need To Send More Docs Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsShareCertificateStep": {
+    "title": "Waiting For Answers About Docs Share Certificate Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "currentUserStep": {
+    "title": "User Step",
+    "type": ["string", "null"],
+    "enum": [
+      null,
+      "Cannot Start Yet",
+      "Personal",
+      "Options",
+      "409A",
+      "Deal Terms",
+      "Agreement",
+      "Identity",
+      "Stock Price",
+      "Bank Account Details",
+      "Final Amount Appendix",
+      "Final Video",
+      "Exercise Request",
+      "Share Certificate",
+      "Finished"
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "userStatus": {
+    "title": "User Status",
+    "type": "string",
+    "enum": [
+      null,
+      "",
+      "Proceed",
+      "Not Qualified",
+      "Follow Up In The Future",
+      "Cannot Start Yet",
+      "Need To Finish Personal Step",
+      "Need To Finish Options Step",
+      "Waiting For Options Step Docs Verification",
+      "Need To Finish 409A Step",
+      "Waiting For 409A Step Docs Verification",
+      "Need To Finish Deal Terms Step",
+      "Need To Finish Agreement Step",
+      "Need To Finish Identity Step",
+      "Need To Finish Stock Price Step",
+      "Waiting For Open Offer Step To Complete",
+      "Waiting For Make Offers Available Step To Complete",
+      "Need To Finish Bank Account Details Step",
+      "Waiting For Close Offers Step To Complete",
+      "Need To Finish Final Amount Appendix Step",
+      "Need To Finish Final Video Step",
+      "Waiting For Upload Funding Wire Step To Complete",
+      "Need To Finish Exercise Request Step",
+      "Need To Finish Share Certificate Step",
+      "Finished"
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["followupDate", "followupTaskName"],
+    "fromFlow": true
+  },
+  "currentProcessingStep": {
+    "title": "Processing Step",
+    "type": ["string", "null"],
+    "enum": [
+      null,
+      "Personal",
+      "Options",
+      "409A",
+      "Deal Terms",
+      "Agreement",
+      "Identity",
+      "Stock Price",
+      "Open Offer",
+      "Make Offers Available",
+      "Bank Account Details",
+      "Close Offers",
+      "Final Amount Appendix",
+      "Final Video",
+      "Upload Funding Wire",
+      "Exercise Request",
+      "Share Certificate"
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "processingStatus": {
+    "title": "Processing Status",
+    "type": "string",
+    "enum": [
+      null,
+      "",
+      "Proceed",
+      "Follow Up In The Future",
+      "Nothing To Do",
+      "Need To Make User Finish Personal Step",
+      "Need To Make User Finish Options Step",
+      "Need To Verify Carta Account Options Step",
+      "Need To Verify Options Step Docs",
+      "Need To Make User Finish 409A Step",
+      "Need To Verify 409A Step Docs",
+      "Need To Make User Finish Deal Terms Step",
+      "Need To Make User Finish Agreement Step",
+      "Need To Countersign Agreement Step Docs",
+      "Need To Make User Spouse Sign Agreement Step Docs",
+      "Need To Make User Finish Identity Step",
+      "Need To Verify Identity Step Docs",
+      "Need To Make User Finish Stock Price Step",
+      "Need To Verify Stock Price Step Docs",
+      "Need To Finish Open Offer Step",
+      "Need To Finish Make Offers Available Step",
+      "Need To Make User Finish Bank Account Details Step",
+      "Need To Finish Close Offers Step",
+      "Need To Make User Finish Final Amount Appendix Step",
+      "Need To Make User Finish Final Video Step",
+      "Need To Verify Final Video Step Docs",
+      "Need To Finish Upload Funding Wire Step",
+      "Need To Make User Finish Exercise Request Step",
+      "Need To Verify Exercise Request Step Docs",
+      "Need To Make User Finish Share Certificate Step",
+      "Need To Verify Share Certificate Step Docs",
+      "Finished"
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "isUserWaitingOurAction": {
+    "title": "Is User Waiting Our Action",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fromFlow": true
+  },
+  "accumulatedTimeUserWaitedOurAction": {
+    "title": "Accumulated Time User Spent Waiting Our Action (not including current wait)",
+    "type": "number",
+    "hidden": true,
+    "fieldDependencies": [
+      "isUserWaitingOurAction",
+      "isUserWaitingOurActionChangedAt"
+    ],
+    "fromFlow": true
+  },
+  "followupDate": {
+    "title": "Followup In The Future Date",
+    "type": ["number", "null"],
+    "format": "datestamp",
+    "fieldDependencies": ["followupTaskName"],
+    "fromFlow": true
+  },
+  "followupTaskName": {
+    "title": "Followup Task Name",
+    "type": ["string", "null"],
+    "hidden": true,
+    "fromFlow": true
+  },
+  "startedMarketingAutomationCurrentStep": {
+    "title": "Has Started Marketing Automation For Current Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationCurrentStep": {
+    "title": "Has Finished Marketing Automation For Current Step",
+    "type": "boolean",
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": ["createdAt"],
+    "fromFlow": true
+  },
+  "immediateAccountManagerActionNeeded": {
+    "title": "Immediate Account Manager Action Needed",
+    "type": ["boolean", "null"],
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocument": {
+    "title": "Status Of Options Document",
+    "type": ["string", "null"],
+    "enum": [
+      "SENT",
+      "SIGNED",
+      "SPOUSE SIGNED",
+      "COUNTERSIGNED",
+      "ASSET MANAGER SIGNED",
+      "VERIFIED",
+      "REJECTED",
+      "NEED TO CHANGE",
+      "VERIFIED AND NEED MORE",
+      "WAITING FOR ANSWERS",
+      "EXPIRES SOON",
+      "EXPIRED",
+      null
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "documentConnections.status",
+      "documentConnections.type",
+      "documentConnections.waitingForAnswersReason"
+    ],
+    "fromFlow": true
+  },
+  "statusOfVerification": {
+    "title": "Status Of Verification",
+    "type": ["string", "null"],
+    "enum": [
+      "SENT",
+      "SIGNED",
+      "SPOUSE SIGNED",
+      "COUNTERSIGNED",
+      "ASSET MANAGER SIGNED",
+      "VERIFIED",
+      "REJECTED",
+      "NEED TO CHANGE",
+      "VERIFIED AND NEED MORE",
+      "WAITING FOR ANSWERS",
+      "EXPIRES SOON",
+      "EXPIRED",
+      null
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "documentConnections.status",
+      "documentConnections.type",
+      "documentConnections.waitingForAnswersReason"
+    ],
+    "fromFlow": true
+  },
+  "statusOfPFC": {
+    "title": "Status Of PFC",
+    "type": ["string", "null"],
+    "enum": [
+      "SENT",
+      "SIGNED",
+      "SPOUSE SIGNED",
+      "COUNTERSIGNED",
+      "ASSET MANAGER SIGNED",
+      "VERIFIED",
+      "REJECTED",
+      "NEED TO CHANGE",
+      "VERIFIED AND NEED MORE",
+      "WAITING FOR ANSWERS",
+      "EXPIRES SOON",
+      "EXPIRED",
+      null
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "documentConnections.status",
+      "documentConnections.type",
+      "documentConnections.waitingForAnswersReason"
+    ],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerification": {
+    "title": "Waiting For Answers Reason For Verification",
+    "type": ["string", "null"],
+    "enum": [
+      "Low Amount - Check For a Friend",
+      "102 Clarification",
+      "Did Not Quit Yet",
+      "Waiting For Answer Which Quantity Grant To Include",
+      "Stock Price Clarification",
+      "Missing Deadline",
+      "Other",
+      null
+    ],
+    "trackChanges": true,
+    "hidden": true,
+    "fieldDependencies": [
+      "documentConnections.status",
+      "documentConnections.type",
+      "documentConnections.waitingForAnswersReason"
+    ],
+    "fromFlow": true
+  },
+  "fieldDependenciesProperty": {
+    "title": "Field Dependencies",
+    "fieldDependencies": [
+      "employee",
+      "documentConnections.type",
+      "documentConnections.status",
+      "documentConnections.statusVERIFIEDChangedAt",
+      "documentConnections.statusNEEDTOCHANGEChangedAt",
+      "documentConnections.statusVERIFIEDANDNEEDMOREChangedAt",
+      "documentConnections.statusWAITINGFORANSWERSChangedAt",
+      "documentConnections.createdAt",
+      "employee.completedOnboarding",
+      "nonQualityRejected",
+      "completedPersonalStep",
+      "residencyId",
+      "spouseName",
+      "spouseEmail",
+      "declaredNoSpouse",
+      "employee.street",
+      "employee.city",
+      "employee.state",
+      "employee.zip",
+      "employee.country",
+      "optionPackages.offerOptions.offer.status",
+      "optionPackages.offerOptions.offer.goLiveDate",
+      "offerStatus",
+      "optionPackages.offerOptions.offer.availableChangedAt",
+      "employee.bankAccount.routingNumber",
+      "employee.bankAccount.accountNumber",
+      "employee.bankAccount.accountName",
+      "employee.bankAccount.accountAddress",
+      "verifiedNoVideo",
+      "fundingAndTaxWire.sentConfirmation",
+      "fundingAndTaxWire.sentConfirmation.swiftConfirmation.status",
+      "fundingAndTaxWire.sentConfirmation.swiftConfirmation.type",
+      "fundingWire.sentConfirmation",
+      "fundingWire.sentConfirmation.swiftConfirmation.status",
+      "fundingWire.sentConfirmation.swiftConfirmation.type",
+      "taxWire.sentConfirmation",
+      "taxWire.sentConfirmation.swiftConfirmation.status",
+      "taxWire.sentConfirmation.swiftConfirmation.type",
+      "optionPackages.offerOptions.offer.exercisePrice",
+      "optionPackages.offerOptions.offer.effectiveExercisePrice"
+    ],
+    "noForeignTrigger": [],
+    "type": "boolean",
+    "hidden": true,
+    "fromFlow": true
+  },
+  "createdAt": {
+    "title": "Creation time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true
+  },
+  "createdBy": {
+    "title": "Creation user",
+    "type": ["string", "null"],
+    "hidden": true
+  },
+  "updatedAt": {
+    "title": "Last update time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true
+  },
+  "updatedBy": {
+    "title": "Update user",
+    "type": ["string", "null"],
+    "hidden": true
+  },
+  "deletedAt": {
+    "title": "Deletion time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true
+  },
+  "deletedBy": {
+    "title": "Deletion user",
+    "type": ["string", "null"],
+    "hidden": true
+  },
+  "lastWrittenAt": {
+    "title": "Last time Entity Was Written to DB",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true
+  },
+  "lastWrittenBy": {
+    "title": "Last User to Write to DB",
+    "type": ["string", "null"],
+    "hidden": true
+  },
+  "creationSessionId": {
+    "title": "Creation Session Id",
+    "type": ["string", "null"],
+    "hidden": true
+  },
+  "deletionSessionId": {
+    "title": "Session Id When entity Removed",
+    "type": ["string", "null"],
+    "hidden": true
+  },
+  "isQualityChangedAt": {
+    "title": "Is quality lead Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["isQuality"],
+    "fromFlow": false
+  },
+  "isQualityManuallyOverride": {
+    "title": "Is quality lead (manually override)",
+    "type": ["boolean", "null"],
+    "hidden": true
+  },
+  "isLowPriorityChangedAt": {
+    "title": "Is Low Priority Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["isLowPriority"],
+    "fromFlow": false
+  },
+  "verifiedChangedAt": {
+    "title": "Is verified Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["verified"],
+    "fromFlow": false
+  },
+  "contactedChangedAt": {
+    "title": "Was Contacted Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["contacted"],
+    "fromFlow": false
+  },
+  "downloadedFundingWireChangedAt": {
+    "title": "Downloaded Funding Wire Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["downloadedFundingWire"],
+    "fromFlow": false
+  },
+  "timeLastChangedOfferStatus": {
+    "title": "Last Time offerStatus Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusLiveChangedAt": {
+    "title": "Offer Status Live Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusAvailableChangedAt": {
+    "title": "Offer Status Available Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusHiddenChangedAt": {
+    "title": "Offer Status Hidden Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusPendingTermsChangeChangedAt": {
+    "title": "Offer Status PendingTermsChange Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusFullyInvestedChangedAt": {
+    "title": "Offer Status FullyInvested Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusFundedChangedAt": {
+    "title": "Offer Status Funded Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "offerStatusDeadChangedAt": {
+    "title": "Offer Status Dead Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["offerStatus"],
+    "fromFlow": false
+  },
+  "didUploadedDocumentsChangedAt": {
+    "title": "Did any document were uploaded for this job Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["didUploadedDocuments"],
+    "fromFlow": false
+  },
+  "declaredNoSpouseChangedAt": {
+    "title": "Declared No Spouse Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["declaredNoSpouse"],
+    "fromFlow": false
+  },
+  "sentSocksChangedAt": {
+    "title": "Sent Socks Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["sentSocks"],
+    "fromFlow": false
+  },
+  "nonQualityRejectedChangedAt": {
+    "title": "Non Quality Rejected Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["nonQualityRejected"],
+    "fromFlow": false
+  },
+  "userCompletedPersonalStepChangedAt": {
+    "title": "User Completed Personal Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedPersonalStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationPersonalStepChangedAt": {
+    "title": "Started Marketing Automation Personal Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationPersonalStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationPersonalStepChangedAt": {
+    "title": "Finished Marketing Automation Personal Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationPersonalStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDonePersonalStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Personal Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDonePersonalStep"],
+    "fromFlow": true
+  },
+  "userCompletedOptionsStepChangedAt": {
+    "title": "User Completed Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedOptionsStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationOptionsStepChangedAt": {
+    "title": "Started Marketing Automation Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationOptionsStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationOptionsStepChangedAt": {
+    "title": "Finished Marketing Automation Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationOptionsStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneOptionsStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneOptionsStep"],
+    "fromFlow": true
+  },
+  "needToVerifyDocsOptionsStepChangedAt": {
+    "title": "Need To Verify Docs Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocsOptionsStep"],
+    "fromFlow": true
+  },
+  "needToVerifyCartaAccountOptionsStepChangedAt": {
+    "title": "Need To Verify Carta Account Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyCartaAccountOptionsStep"],
+    "fromFlow": true
+  },
+  "docsVerifiedOptionsStepChangedAt": {
+    "title": "Docs Verified Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerifiedOptionsStep"],
+    "fromFlow": true
+  },
+  "userWaitingOurActionOptionsStepChangedAt": {
+    "title": "User Waiting Our Action Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingOurActionOptionsStep"],
+    "fromFlow": true
+  },
+  "userWaitingForVerificationOptionsStepChangedAt": {
+    "title": "User Waiting For Verification Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingForVerificationOptionsStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocsOptionsStepChangedAt": {
+    "title": "Need To ReUpload Docs Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocsOptionsStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocsOptionsStepChangedAt": {
+    "title": "Need To Send More Docs Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocsOptionsStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsOptionsStepChangedAt": {
+    "title": "Waiting For Answers About Docs Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocsOptionsStep"],
+    "fromFlow": true
+  },
+  "docsRejectedOptionsStepChangedAt": {
+    "title": "Docs Rejected Options Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsRejectedOptionsStep"],
+    "fromFlow": true
+  },
+  "userCompleted409AStepChangedAt": {
+    "title": "User Completed 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompleted409AStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomation409AStepChangedAt": {
+    "title": "Started Marketing Automation 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomation409AStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomation409AStepChangedAt": {
+    "title": "Finished Marketing Automation 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomation409AStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDone409AStepChangedAt": {
+    "title": "All Necessary Manual Processing Done 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDone409AStep"],
+    "fromFlow": true
+  },
+  "needToVerifyDocs409AStepChangedAt": {
+    "title": "Need To Verify Docs 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocs409AStep"],
+    "fromFlow": true
+  },
+  "docsVerified409AStepChangedAt": {
+    "title": "Docs Verified 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerified409AStep"],
+    "fromFlow": true
+  },
+  "userWaitingOurAction409AStepChangedAt": {
+    "title": "User Waiting Our Action 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingOurAction409AStep"],
+    "fromFlow": true
+  },
+  "userWaitingForVerification409AStepChangedAt": {
+    "title": "User Waiting For Verification 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingForVerification409AStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocs409AStepChangedAt": {
+    "title": "Need To ReUpload Docs 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocs409AStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocs409AStepChangedAt": {
+    "title": "Need To Send More Docs 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocs409AStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocs409AStepChangedAt": {
+    "title": "Waiting For Answers About Docs 409A Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocs409AStep"],
+    "fromFlow": true
+  },
+  "userCompletedDealTermsStepChangedAt": {
+    "title": "User Completed Deal Terms Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedDealTermsStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationDealTermsStepChangedAt": {
+    "title": "Started Marketing Automation Deal Terms Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationDealTermsStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationDealTermsStepChangedAt": {
+    "title": "Finished Marketing Automation Deal Terms Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationDealTermsStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneDealTermsStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Deal Terms Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneDealTermsStep"],
+    "fromFlow": true
+  },
+  "userCompletedAgreementStepChangedAt": {
+    "title": "User Completed Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedAgreementStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationAgreementStepChangedAt": {
+    "title": "Started Marketing Automation Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationAgreementStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationAgreementStepChangedAt": {
+    "title": "Finished Marketing Automation Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationAgreementStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneAgreementStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneAgreementStep"],
+    "fromFlow": true
+  },
+  "docsSignedAgreementStepChangedAt": {
+    "title": "Docs Signed Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsSignedAgreementStep"],
+    "fromFlow": true
+  },
+  "needToCountersignDocsAgreementStepChangedAt": {
+    "title": "Need To Countersign Docs Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToCountersignDocsAgreementStep"],
+    "fromFlow": true
+  },
+  "docsCountersignedAgreementStepChangedAt": {
+    "title": "Docs Countersigned Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsCountersignedAgreementStep"],
+    "fromFlow": true
+  },
+  "docsSignedBySpouseAgreementStepChangedAt": {
+    "title": "Docs signed By Spouse Agreement Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsSignedBySpouseAgreementStep"],
+    "fromFlow": true
+  },
+  "userCompletedIdentityStepChangedAt": {
+    "title": "User Completed Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedIdentityStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationIdentityStepChangedAt": {
+    "title": "Started Marketing Automation Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationIdentityStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationIdentityStepChangedAt": {
+    "title": "Finished Marketing Automation Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationIdentityStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneIdentityStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneIdentityStep"],
+    "fromFlow": true
+  },
+  "needToVerifyDocsIdentityStepChangedAt": {
+    "title": "Need To Verify Docs Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocsIdentityStep"],
+    "fromFlow": true
+  },
+  "docsVerifiedIdentityStepChangedAt": {
+    "title": "Docs Verified Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerifiedIdentityStep"],
+    "fromFlow": true
+  },
+  "docsSignedIdentityStepChangedAt": {
+    "title": "Docs Signed Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsSignedIdentityStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocsIdentityStepChangedAt": {
+    "title": "Need To ReUpload Docs Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocsIdentityStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocsIdentityStepChangedAt": {
+    "title": "Need To Send More Docs Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocsIdentityStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsIdentityStepChangedAt": {
+    "title": "Waiting For Answers About Docs Identity Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocsIdentityStep"],
+    "fromFlow": true
+  },
+  "userCompletedStockPriceStepChangedAt": {
+    "title": "User Completed Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedStockPriceStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationStockPriceStepChangedAt": {
+    "title": "Started Marketing Automation Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationStockPriceStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationStockPriceStepChangedAt": {
+    "title": "Finished Marketing Automation Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationStockPriceStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneStockPriceStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneStockPriceStep"],
+    "fromFlow": true
+  },
+  "needToVerifyDocsStockPriceStepChangedAt": {
+    "title": "Need To Verify Docs Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocsStockPriceStep"],
+    "fromFlow": true
+  },
+  "docsVerifiedStockPriceStepChangedAt": {
+    "title": "Docs Verified Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerifiedStockPriceStep"],
+    "fromFlow": true
+  },
+  "userWaitingOurActionStockPriceStepChangedAt": {
+    "title": "User Waiting Our Action Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingOurActionStockPriceStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocsStockPriceStepChangedAt": {
+    "title": "Need To ReUpload Docs Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocsStockPriceStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocsStockPriceStepChangedAt": {
+    "title": "Need To Send More Docs Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocsStockPriceStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsStockPriceStepChangedAt": {
+    "title": "Waiting For Answers About Docs Stock Price Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocsStockPriceStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationOpenOfferStepChangedAt": {
+    "title": "Started Marketing Automation Open Offer Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationOpenOfferStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationOpenOfferStepChangedAt": {
+    "title": "Finished Marketing Automation Open Offer Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationOpenOfferStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneOpenOfferStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Open Offer Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneOpenOfferStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationMakeOffersAvailableStepChangedAt": {
+    "title": "Started Marketing Automation Make Offers Available Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationMakeOffersAvailableStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationMakeOffersAvailableStepChangedAt": {
+    "title": "Finished Marketing Automation Make Offers Available Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationMakeOffersAvailableStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneMakeOffersAvailableStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Make Offers Available Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": [
+      "allNecessaryManualProcessingDoneMakeOffersAvailableStep"
+    ],
+    "fromFlow": true
+  },
+  "userCompletedBankAccountDetailsStepChangedAt": {
+    "title": "User Completed Bank Account Details Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedBankAccountDetailsStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationBankAccountDetailsStepChangedAt": {
+    "title": "Started Marketing Automation Bank Account Details Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationBankAccountDetailsStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationBankAccountDetailsStepChangedAt": {
+    "title": "Finished Marketing Automation Bank Account Details Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationBankAccountDetailsStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneBankAccountDetailsStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Bank Account Details Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": [
+      "allNecessaryManualProcessingDoneBankAccountDetailsStep"
+    ],
+    "fromFlow": true
+  },
+  "userWaitingOurActionBankAccountDetailsStepChangedAt": {
+    "title": "User Waiting Our Action Bank Account Details Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingOurActionBankAccountDetailsStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationCloseOffersStepChangedAt": {
+    "title": "Started Marketing Automation Close Offers Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationCloseOffersStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationCloseOffersStepChangedAt": {
+    "title": "Finished Marketing Automation Close Offers Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationCloseOffersStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneCloseOffersStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Close Offers Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneCloseOffersStep"],
+    "fromFlow": true
+  },
+  "userCompletedFinalAmountAppendixStepChangedAt": {
+    "title": "User Completed Final Amount Appendix Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedFinalAmountAppendixStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationFinalAmountAppendixStepChangedAt": {
+    "title": "Started Marketing Automation Final Amount Appendix Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationFinalAmountAppendixStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationFinalAmountAppendixStepChangedAt": {
+    "title": "Finished Marketing Automation Final Amount Appendix Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationFinalAmountAppendixStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneFinalAmountAppendixStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Final Amount Appendix Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": [
+      "allNecessaryManualProcessingDoneFinalAmountAppendixStep"
+    ],
+    "fromFlow": true
+  },
+  "docsSignedFinalAmountAppendixStepChangedAt": {
+    "title": "Docs Signed Final Amount Appendix Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsSignedFinalAmountAppendixStep"],
+    "fromFlow": true
+  },
+  "userCompletedFinalVideoStepChangedAt": {
+    "title": "User Completed Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedFinalVideoStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationFinalVideoStepChangedAt": {
+    "title": "Started Marketing Automation Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationFinalVideoStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationFinalVideoStepChangedAt": {
+    "title": "Finished Marketing Automation Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationFinalVideoStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneFinalVideoStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["allNecessaryManualProcessingDoneFinalVideoStep"],
+    "fromFlow": true
+  },
+  "needToVerifyDocsFinalVideoStepChangedAt": {
+    "title": "Need To Verify Docs Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocsFinalVideoStep"],
+    "fromFlow": true
+  },
+  "docsVerifiedFinalVideoStepChangedAt": {
+    "title": "Docs Verified Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerifiedFinalVideoStep"],
+    "fromFlow": true
+  },
+  "userWaitingOurActionFinalVideoStepChangedAt": {
+    "title": "User Waiting Our Action Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userWaitingOurActionFinalVideoStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocsFinalVideoStepChangedAt": {
+    "title": "Need To ReUpload Docs Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocsFinalVideoStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocsFinalVideoStepChangedAt": {
+    "title": "Need To Send More Docs Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocsFinalVideoStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsFinalVideoStepChangedAt": {
+    "title": "Waiting For Answers About Docs Final Video Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocsFinalVideoStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationUploadFundingWireStepChangedAt": {
+    "title": "Started Marketing Automation Upload Funding Wire Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationUploadFundingWireStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationUploadFundingWireStepChangedAt": {
+    "title": "Finished Marketing Automation Upload Funding Wire Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationUploadFundingWireStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneUploadFundingWireStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Upload Funding Wire Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": [
+      "allNecessaryManualProcessingDoneUploadFundingWireStep"
+    ],
+    "fromFlow": true
+  },
+  "userCompletedExerciseRequestStepChangedAt": {
+    "title": "User Completed Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationExerciseRequestStepChangedAt": {
+    "title": "Started Marketing Automation Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationExerciseRequestStepChangedAt": {
+    "title": "Finished Marketing Automation Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneExerciseRequestStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": [
+      "allNecessaryManualProcessingDoneExerciseRequestStep"
+    ],
+    "fromFlow": true
+  },
+  "needToVerifyDocsExerciseRequestStepChangedAt": {
+    "title": "Need To Verify Docs Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocsExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "docsVerifiedExerciseRequestStepChangedAt": {
+    "title": "Docs Verified Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerifiedExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocsExerciseRequestStepChangedAt": {
+    "title": "Need To ReUpload Docs Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocsExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocsExerciseRequestStepChangedAt": {
+    "title": "Need To Send More Docs Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocsExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsExerciseRequestStepChangedAt": {
+    "title": "Waiting For Answers About Docs Exercise Request Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocsExerciseRequestStep"],
+    "fromFlow": true
+  },
+  "userCompletedShareCertificateStepChangedAt": {
+    "title": "User Completed Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userCompletedShareCertificateStep"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationShareCertificateStepChangedAt": {
+    "title": "Started Marketing Automation Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationShareCertificateStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationShareCertificateStepChangedAt": {
+    "title": "Finished Marketing Automation Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationShareCertificateStep"],
+    "fromFlow": true
+  },
+  "allNecessaryManualProcessingDoneShareCertificateStepChangedAt": {
+    "title": "All Necessary Manual Processing Done Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": [
+      "allNecessaryManualProcessingDoneShareCertificateStep"
+    ],
+    "fromFlow": true
+  },
+  "needToVerifyDocsShareCertificateStepChangedAt": {
+    "title": "Need To Verify Docs Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToVerifyDocsShareCertificateStep"],
+    "fromFlow": true
+  },
+  "docsVerifiedShareCertificateStepChangedAt": {
+    "title": "Docs Verified Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["docsVerifiedShareCertificateStep"],
+    "fromFlow": true
+  },
+  "needToReUploadDocsShareCertificateStepChangedAt": {
+    "title": "Need To ReUpload Docs Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToReUploadDocsShareCertificateStep"],
+    "fromFlow": true
+  },
+  "needToSendMoreDocsShareCertificateStepChangedAt": {
+    "title": "Need To Send More Docs Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["needToSendMoreDocsShareCertificateStep"],
+    "fromFlow": true
+  },
+  "waitingForAnswersAboutDocsShareCertificateStepChangedAt": {
+    "title": "Waiting For Answers About Docs Share Certificate Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["waitingForAnswersAboutDocsShareCertificateStep"],
+    "fromFlow": true
+  },
+  "timeLastChangedCurrentUserStep": {
+    "title": "Last Time currentUserStep Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepCannotStartYetChangedAt": {
+    "title": "User Step CannotStartYet Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepPersonalChangedAt": {
+    "title": "User Step Personal Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepOptionsChangedAt": {
+    "title": "User Step Options Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStep409AChangedAt": {
+    "title": "User Step 409A Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepDealTermsChangedAt": {
+    "title": "User Step DealTerms Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepAgreementChangedAt": {
+    "title": "User Step Agreement Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepIdentityChangedAt": {
+    "title": "User Step Identity Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepStockPriceChangedAt": {
+    "title": "User Step StockPrice Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepBankAccountDetailsChangedAt": {
+    "title": "User Step BankAccountDetails Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepFinalAmountAppendixChangedAt": {
+    "title": "User Step FinalAmountAppendix Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepFinalVideoChangedAt": {
+    "title": "User Step FinalVideo Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepExerciseRequestChangedAt": {
+    "title": "User Step ExerciseRequest Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepShareCertificateChangedAt": {
+    "title": "User Step ShareCertificate Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "currentUserStepFinishedChangedAt": {
+    "title": "User Step Finished Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentUserStep"],
+    "fromFlow": true
+  },
+  "timeLastChangedUserStatus": {
+    "title": "Last Time userStatus Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusProceedChangedAt": {
+    "title": "User Status Proceed Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNotQualifiedChangedAt": {
+    "title": "User Status NotQualified Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusFollowUpInTheFutureChangedAt": {
+    "title": "User Status FollowUpInTheFuture Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusCannotStartYetChangedAt": {
+    "title": "User Status CannotStartYet Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishPersonalStepChangedAt": {
+    "title": "User Status NeedToFinishPersonalStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishOptionsStepChangedAt": {
+    "title": "User Status NeedToFinishOptionsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusWaitingForOptionsStepDocsVerificationChangedAt": {
+    "title": "User Status WaitingForOptionsStepDocsVerification Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinish409AStepChangedAt": {
+    "title": "User Status NeedToFinish409AStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusWaitingFor409AStepDocsVerificationChangedAt": {
+    "title": "User Status WaitingFor409AStepDocsVerification Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishDealTermsStepChangedAt": {
+    "title": "User Status NeedToFinishDealTermsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishAgreementStepChangedAt": {
+    "title": "User Status NeedToFinishAgreementStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishIdentityStepChangedAt": {
+    "title": "User Status NeedToFinishIdentityStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishStockPriceStepChangedAt": {
+    "title": "User Status NeedToFinishStockPriceStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusWaitingForOpenOfferStepToCompleteChangedAt": {
+    "title": "User Status WaitingForOpenOfferStepToComplete Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusWaitingForMakeOffersAvailableStepToCompleteChangedAt": {
+    "title": "User Status WaitingForMakeOffersAvailableStepToComplete Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishBankAccountDetailsStepChangedAt": {
+    "title": "User Status NeedToFinishBankAccountDetailsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusWaitingForCloseOffersStepToCompleteChangedAt": {
+    "title": "User Status WaitingForCloseOffersStepToComplete Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishFinalAmountAppendixStepChangedAt": {
+    "title": "User Status NeedToFinishFinalAmountAppendixStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishFinalVideoStepChangedAt": {
+    "title": "User Status NeedToFinishFinalVideoStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusWaitingForUploadFundingWireStepToCompleteChangedAt": {
+    "title": "User Status WaitingForUploadFundingWireStepToComplete Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishExerciseRequestStepChangedAt": {
+    "title": "User Status NeedToFinishExerciseRequestStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusNeedToFinishShareCertificateStepChangedAt": {
+    "title": "User Status NeedToFinishShareCertificateStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "userStatusFinishedChangedAt": {
+    "title": "User Status Finished Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["userStatus"],
+    "fromFlow": true
+  },
+  "timeLastChangedCurrentProcessingStep": {
+    "title": "Last Time currentProcessingStep Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepPersonalChangedAt": {
+    "title": "Processing Step Personal Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepOptionsChangedAt": {
+    "title": "Processing Step Options Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStep409AChangedAt": {
+    "title": "Processing Step 409A Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepDealTermsChangedAt": {
+    "title": "Processing Step DealTerms Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepAgreementChangedAt": {
+    "title": "Processing Step Agreement Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepIdentityChangedAt": {
+    "title": "Processing Step Identity Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepStockPriceChangedAt": {
+    "title": "Processing Step StockPrice Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepOpenOfferChangedAt": {
+    "title": "Processing Step OpenOffer Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepMakeOffersAvailableChangedAt": {
+    "title": "Processing Step MakeOffersAvailable Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepBankAccountDetailsChangedAt": {
+    "title": "Processing Step BankAccountDetails Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepCloseOffersChangedAt": {
+    "title": "Processing Step CloseOffers Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepFinalAmountAppendixChangedAt": {
+    "title": "Processing Step FinalAmountAppendix Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepFinalVideoChangedAt": {
+    "title": "Processing Step FinalVideo Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepUploadFundingWireChangedAt": {
+    "title": "Processing Step UploadFundingWire Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepExerciseRequestChangedAt": {
+    "title": "Processing Step ExerciseRequest Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "currentProcessingStepShareCertificateChangedAt": {
+    "title": "Processing Step ShareCertificate Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["currentProcessingStep"],
+    "fromFlow": true
+  },
+  "timeLastChangedProcessingStatus": {
+    "title": "Last Time processingStatus Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusProceedChangedAt": {
+    "title": "Processing Status Proceed Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusFollowUpInTheFutureChangedAt": {
+    "title": "Processing Status FollowUpInTheFuture Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNothingToDoChangedAt": {
+    "title": "Processing Status NothingToDo Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishPersonalStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishPersonalStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishOptionsStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishOptionsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyCartaAccountOptionsStepChangedAt": {
+    "title": "Processing Status NeedToVerifyCartaAccountOptionsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyOptionsStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerifyOptionsStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinish409AStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinish409AStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerify409AStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerify409AStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishDealTermsStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishDealTermsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishAgreementStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishAgreementStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToCountersignAgreementStepDocsChangedAt": {
+    "title": "Processing Status NeedToCountersignAgreementStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserSpouseSignAgreementStepDocsChangedAt": {
+    "title": "Processing Status NeedToMakeUserSpouseSignAgreementStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishIdentityStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishIdentityStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyIdentityStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerifyIdentityStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishStockPriceStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishStockPriceStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyStockPriceStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerifyStockPriceStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToFinishOpenOfferStepChangedAt": {
+    "title": "Processing Status NeedToFinishOpenOfferStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToFinishMakeOffersAvailableStepChangedAt": {
+    "title": "Processing Status NeedToFinishMakeOffersAvailableStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishBankAccountDetailsStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishBankAccountDetailsStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToFinishCloseOffersStepChangedAt": {
+    "title": "Processing Status NeedToFinishCloseOffersStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishFinalAmountAppendixStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishFinalAmountAppendixStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishFinalVideoStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishFinalVideoStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyFinalVideoStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerifyFinalVideoStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToFinishUploadFundingWireStepChangedAt": {
+    "title": "Processing Status NeedToFinishUploadFundingWireStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishExerciseRequestStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishExerciseRequestStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyExerciseRequestStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerifyExerciseRequestStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToMakeUserFinishShareCertificateStepChangedAt": {
+    "title": "Processing Status NeedToMakeUserFinishShareCertificateStep Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusNeedToVerifyShareCertificateStepDocsChangedAt": {
+    "title": "Processing Status NeedToVerifyShareCertificateStepDocs Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "processingStatusFinishedChangedAt": {
+    "title": "Processing Status Finished Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["processingStatus"],
+    "fromFlow": true
+  },
+  "isUserWaitingOurActionChangedAt": {
+    "title": "Is User Waiting Our Action Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["isUserWaitingOurAction"],
+    "fromFlow": true
+  },
+  "startedMarketingAutomationCurrentStepChangedAt": {
+    "title": "Has Started Marketing Automation For Current Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["startedMarketingAutomationCurrentStep"],
+    "fromFlow": true
+  },
+  "finishedMarketingAutomationCurrentStepChangedAt": {
+    "title": "Has Finished Marketing Automation For Current Step Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["finishedMarketingAutomationCurrentStep"],
+    "fromFlow": true
+  },
+  "timeLastChangedStatusOfOptionsDocument": {
+    "title": "Last Time statusOfOptionsDocument Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentSENTChangedAt": {
+    "title": "Status Of Options Document SENT Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentSIGNEDChangedAt": {
+    "title": "Status Of Options Document SIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentSPOUSESIGNEDChangedAt": {
+    "title": "Status Of Options Document SPOUSESIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentCOUNTERSIGNEDChangedAt": {
+    "title": "Status Of Options Document COUNTERSIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentASSETMANAGERSIGNEDChangedAt": {
+    "title": "Status Of Options Document ASSETMANAGERSIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentVERIFIEDChangedAt": {
+    "title": "Status Of Options Document VERIFIED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentREJECTEDChangedAt": {
+    "title": "Status Of Options Document REJECTED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentNEEDTOCHANGEChangedAt": {
+    "title": "Status Of Options Document NEEDTOCHANGE Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentVERIFIEDANDNEEDMOREChangedAt": {
+    "title": "Status Of Options Document VERIFIEDANDNEEDMORE Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentWAITINGFORANSWERSChangedAt": {
+    "title": "Status Of Options Document WAITINGFORANSWERS Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentEXPIRESSOONChangedAt": {
+    "title": "Status Of Options Document EXPIRESSOON Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "statusOfOptionsDocumentEXPIREDChangedAt": {
+    "title": "Status Of Options Document EXPIRED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfOptionsDocument"],
+    "fromFlow": true
+  },
+  "timeLastChangedStatusOfVerification": {
+    "title": "Last Time statusOfVerification Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationSENTChangedAt": {
+    "title": "Status Of Verification SENT Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationSIGNEDChangedAt": {
+    "title": "Status Of Verification SIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationSPOUSESIGNEDChangedAt": {
+    "title": "Status Of Verification SPOUSESIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationCOUNTERSIGNEDChangedAt": {
+    "title": "Status Of Verification COUNTERSIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationASSETMANAGERSIGNEDChangedAt": {
+    "title": "Status Of Verification ASSETMANAGERSIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationVERIFIEDChangedAt": {
+    "title": "Status Of Verification VERIFIED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationREJECTEDChangedAt": {
+    "title": "Status Of Verification REJECTED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationNEEDTOCHANGEChangedAt": {
+    "title": "Status Of Verification NEEDTOCHANGE Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationVERIFIEDANDNEEDMOREChangedAt": {
+    "title": "Status Of Verification VERIFIEDANDNEEDMORE Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationWAITINGFORANSWERSChangedAt": {
+    "title": "Status Of Verification WAITINGFORANSWERS Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationEXPIRESSOONChangedAt": {
+    "title": "Status Of Verification EXPIRESSOON Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "statusOfVerificationEXPIREDChangedAt": {
+    "title": "Status Of Verification EXPIRED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfVerification"],
+    "fromFlow": true
+  },
+  "timeLastChangedStatusOfPfc": {
+    "title": "Last Time statusOfPFC Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCSENTChangedAt": {
+    "title": "Status Of PFC SENT Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCSIGNEDChangedAt": {
+    "title": "Status Of PFC SIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCSPOUSESIGNEDChangedAt": {
+    "title": "Status Of PFC SPOUSESIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCCOUNTERSIGNEDChangedAt": {
+    "title": "Status Of PFC COUNTERSIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCASSETMANAGERSIGNEDChangedAt": {
+    "title": "Status Of PFC ASSETMANAGERSIGNED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCVERIFIEDChangedAt": {
+    "title": "Status Of PFC VERIFIED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCREJECTEDChangedAt": {
+    "title": "Status Of PFC REJECTED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCNEEDTOCHANGEChangedAt": {
+    "title": "Status Of PFC NEEDTOCHANGE Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCVERIFIEDANDNEEDMOREChangedAt": {
+    "title": "Status Of PFC VERIFIEDANDNEEDMORE Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCWAITINGFORANSWERSChangedAt": {
+    "title": "Status Of PFC WAITINGFORANSWERS Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCEXPIRESSOONChangedAt": {
+    "title": "Status Of PFC EXPIRESSOON Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "statusOfPFCEXPIREDChangedAt": {
+    "title": "Status Of PFC EXPIRED Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["statusOfPFC"],
+    "fromFlow": true
+  },
+  "timeLastChangedReasonForWaitingForAnswersForVerification": {
+    "title": "Last Time reasonForWaitingForAnswersForVerification Was Changed",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerificationLowAmountCheckForaFriendChangedAt": {
+    "title": "Waiting For Answers Reason For Verification LowAmount-CheckForaFriend Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerification102ClarificationChangedAt": {
+    "title": "Waiting For Answers Reason For Verification 102Clarification Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerificationDidNotQuitYetChangedAt": {
+    "title": "Waiting For Answers Reason For Verification DidNotQuitYet Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerificationWaitingForAnswerWhichQuantityGrantToIncludeChangedAt": {
+    "title": "Waiting For Answers Reason For Verification WaitingForAnswerWhichQuantity GrantToInclude Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerificationStockPriceClarificationChangedAt": {
+    "title": "Waiting For Answers Reason For Verification StockPriceClarification Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerificationMissingDeadlineChangedAt": {
+    "title": "Waiting For Answers Reason For Verification MissingDeadline Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  },
+  "reasonForWaitingForAnswersForVerificationOtherChangedAt": {
+    "title": "Waiting For Answers Reason For Verification Other Change Time",
+    "type": ["number", "null"],
+    "format": "timestamp",
+    "hidden": true,
+    "fieldDependencies": ["reasonForWaitingForAnswersForVerification"],
+    "fromFlow": true
+  }
+}
