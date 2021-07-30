@@ -22,11 +22,16 @@ type PropertyType = "string" | "number" | "object" | "boolean" | "null";
 
 type Enum = (string | null)[];
 
+type ForeignKey = "one-to-many" | "many-to-one" | "one-to-one";
+
 type Property = {
-  title: string;
+  title?: string;
   type: PropertyType | PropertyType[];
   enum?: Enum;
   properties?: Properties;
+  required?: string[];
+  foreignKey?: string;
+  foreignKeyType?: ForeignKey;
 };
 
 type Properties = {
@@ -48,10 +53,13 @@ type Schema = {
    6. Retrieve all types for specific key, combine them via .combine
 */
 
-function Main() {
+function Main(schema: Schema) {
+  const foreignKeys = new Map<string, string>();
+  const requiredProperties = schema.required;
+
   function combine(properties: Enum) {
     return _(properties).reduce((acc, val) => {
-      if (acc.includes(val)) {
+      if (acc.includes(String(val))) {
         return acc;
       }
 
@@ -80,6 +88,35 @@ function Main() {
 
         return acc;
       }, "");
+  }
+
+  function processForeignKey(property: Property, key: string) {
+    if (!property.foreignKey) {
+      return "";
+    }
+    if (!property.foreignKeyType) {
+      return "";
+    }
+
+    const foreignKeyTitle = _(property.foreignKey)
+      .split("-")
+      .map((part) => _.capitalize(part))
+      .join("");
+    const foreignKeyTitleType = match(property.foreignKeyType)
+      .with("one-to-many", () => "[]")
+      .otherwise(() => "");
+    const foreignKeyWithoutId = match(property.foreignKeyType)
+      .with("one-to-many", () => key.slice(0, key.length - 3) + "s")
+      .otherwise(() => key.slice(0, key.length - 2));
+
+    foreignKeys.set(foreignKeyTitle, property.foreignKey);
+
+    const isRequired =
+      requiredProperties && requiredProperties?.indexOf(key) > -1 ? "" : "?";
+    const isNullable =
+      _.isArray(property.type) && property.type.indexOf("null") > -1;
+    const isNullableParameter = isNullable ? " | null" : "";
+    return `${foreignKeyWithoutId}${isRequired}: ${foreignKeyTitle}${foreignKeyTitleType}${isNullableParameter};`;
   }
 
   function processType(
@@ -115,7 +152,7 @@ function Main() {
         if (property.properties) {
           return processObjectProperties(property.properties);
         } else {
-          return `{ [key: string]: any; }`;
+          return `{ [key: string]: unknown; }`;
         }
       })
       .with([__, __], (types: PropertyType[]) => {
@@ -131,7 +168,11 @@ function Main() {
       })
       .with(__, (t: PropertyType) => processType(t, property))
       .exhaustive();
-    return `${fieldName}: ${fieldType};`;
+    const isRequired =
+      requiredProperties && requiredProperties?.indexOf(fieldName) > -1
+        ? ""
+        : "?";
+    return `${fieldName}${isRequired}: ${fieldType};`;
   }
 
   /*
@@ -140,15 +181,19 @@ function Main() {
     step 3. make support for foreign keys
   */
 
-  function process(name: string, schema: Schema) {
+  function processInterface(name: string) {
     const mappedProperties: string = _(schema.properties)
       .map((value: Property, key: string) => processProperty(key.trim(), value))
       .join("\n");
-    return `export interface ${name} { ${mappedProperties} }`;
+    const foreignKeyProperties: string = _(schema.properties)
+      .map(processForeignKey)
+      .filter((vl) => !!vl)
+      .join("\n");
+    return `export interface ${name} { ${mappedProperties} ${foreignKeyProperties} [key: string]: unknown; }`;
   }
 
   return {
-    process
+    processInterface
   };
 }
 
@@ -157,7 +202,7 @@ const test = {
   properties: job
 };
 
-const result = Main().process("Test", test);
+const result = Main(test).processInterface("test");
 console.log(result);
 
 document.getElementById("app").innerHTML = `
